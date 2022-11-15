@@ -1,11 +1,14 @@
+import { useEffect } from "react";
 import { useContext } from "react";
 import { ONContact } from "../Contact/Contact";
+import Oprations from "../Controller/Opration";
 import Row from "./Row";
 
 const Table=()=>{
   let Context=useContext(ONContact);
+  let Oprationn=new Oprations;
+  useEffect(Oprationn.getData,[])
 return(
-  
   <div className="row mt-5 mb-5">
   <div className="custom-card ">
     <table className="table ">

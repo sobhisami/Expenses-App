@@ -1,5 +1,6 @@
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import { useContext } from "react";
 import Swal from "sweetalert2";
 import { ONContact } from "../Contact/Contact";
@@ -16,8 +17,7 @@ Swal.fire({
   confirmButtonText: 'Yes, delete it!'
 }).then((result) => {
   if (result.isConfirmed) {
-    let NewFillter=Context.NewArray.filter(element=>element.id!=props.show.id)
-Context.SetNew(NewFillter);
+     DeletaData();
     Swal.fire(
       'Deleted!',
       'Your file has been deleted.',
@@ -25,6 +25,17 @@ Context.SetNew(NewFillter);
     )
   }
 })
+  }
+  
+  let DeletaData=()=>{
+    axios.delete(`https://expenses-context-default-rtdb.firebaseio.com/expenses/${props.show.id}.json`)
+    .then(response=>{
+      console.log(response);
+      let NewFillter=Context.NewArray.filter(element=>element.id!=props.show.id)
+      Context.SetNew(NewFillter);
+    }).catch(error=>{
+      console.error(error);
+    })
   }
   return(
     <tr>

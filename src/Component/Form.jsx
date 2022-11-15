@@ -1,6 +1,8 @@
-import { useContext, useRef } from "react";
+import axios from "axios";
+import { useContext, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import { ONContact } from "../Contact/Contact";
+import Oprations from "../Controller/Opration";
 
 const Form=()=>{
   let Context=useContext(ONContact);
@@ -10,8 +12,9 @@ const Form=()=>{
     SavaObject();
     Clear();
    }
-  }
 
+  }
+  
   let cheak=()=>{
  if (   TitleRef.current.value!='' &&
   DataRef.current.value!='' &&
@@ -35,16 +38,22 @@ const Form=()=>{
   let DiscriptionRef=useRef();
   let SavaObject=()=>{
     let Object={
-      id:Math.random(),
       Title:TitleRef.current.value,
       Data:DataRef.current.value,
       Value:ValueRef.current.value,
       Description:DiscriptionRef.current.value,
     }
     // console.log(Object);
-    Context.SetNew((New)=>{
-    return [Object,...New]
-    });
+    axios.post("https://expenses-context-default-rtdb.firebaseio.com/expenses.json",
+      Object,
+    ).then(response=>{
+       Object.id=response.data.name;
+       Context.SetNew((New)=>{
+        return [Object,...New]
+        });
+    }).catch(error=>{
+      console.error(error);
+    })
     Swal.fire({
       icon: 'success',
       title: 'Your work has been saved',
